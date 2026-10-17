@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#211d18">
+<title>Blessed-collins Interior Furnitures</title>
+
+<!-- Supabase JavaScript library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --dark: #211d18;
+    --brown: #745538;
+    --gold: #c6a36b;
+    --cream: #f7f3ed;
+    --border: #e8e0d6;
+    --green: #16834a;
+    --red: #c0392b;
+    --text: #28241f;
+    --muted: #77716a;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    color: var(--text);
+    line-height: 1.6;
+}
+
+button, input, select, textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.topbar {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    padding: 9px;
+    font-size: 12px;
+}
+
+header {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.header-inner {
+    max-width: 1250px;
+    margin: auto;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.logo {
+    font-family: Georgia, serif;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.logo small {
+    display: block;
+    color: var(--brown);
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    border: none;
+    background: var(--dark);
+    color: white;
+    padding: 11px 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 13px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn:hover {
+    opacity: .85;
+}
+
+.gold {
+    background: var(--gold);
+    color: var(--dark);
+}
+
+.green {
+    background: var(--green);
+    color: white;
+}
+
+.red {
+    background: var(--red);
+}
+
+.outline {
+    background: white;
+    color: var(--dark);
+    border: 1px solid var(--border);
+}
+
+.hero {
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    background:
+        linear-gradient(90deg, rgba(20,17,13,.85), rgba(20,17,13,.2)),
+        url("https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=85")
+        center/cover;
+    color: white;
+}
+
+.hero-inner {
+    max-width: 1250px;
+    width: 100%;
+    margin: auto;
+    padding: 45px 25px;
+}
+
+.eyebrow {
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.hero h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(36px, 6vw, 60px);
+    max-width: 650px;
+    line-height: 1.15;
+    margin: 15px 0;
+}
+
+.hero p {
+    max-width: 480px;
+    color: #eee;
+    margin-bottom: 23px;
+}
+
+.section {
+    padding: 55px 20px;
+}
+
+.cream {
+    background: var(--cream);
+}
+
+.container {
+    max-width: 1250px;
+    margin: auto;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.section-title h2 {
+    font-family: Georgia, serif;
+    font-size: clamp(26px, 4vw, 37px);
+    margin: 8px 0;
+}
+
+.section-title p {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.category-btn {
+    padding: 10px 15px;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.category-btn.active {
+    background: var(--dark);
+    color: white;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.toolbar input, .toolbar select {
+    border: 1px solid var(--border);
+    padding: 12px;
+    background: white;
+    border-radius: 3px;
+}
+
+.toolbar input {
+    flex: 1;
+    min-width: 170px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.product-card {
+    border: 1px solid var(--border);
+    background: white;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.product-card img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    background: var(--cream);
+    display: block;
+}
+
+.product-info {
+    padding: 14px;
+}
+
+.product-info h3 {
+    font-size: 15px;
+    margin: 5px 0;
+}
+
+.product-info p {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.product-category {
+    font-size: 10px;
+    color: var(--brown);
+    text-transform: uppercase;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 12px 0;
+}
+
+.product-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.product-buttons button {
+    flex: 1;
+    padding: 10px 5px;
+    font-size: 11px;
+}
+
+.empty {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 35px 10px;
+    color: var(--muted);
+}
+
+.delivery-banner {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    padding: 35px 20px;
+}
+
+.delivery-banner h2 {
+    font-family: Georgia, serif;
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.delivery-banner p {
+    color: #ddd;
+    font-size: 13px;
+}
+
+footer {
+    background: #171512;
+    color: white;
+    text-align: center;
+    padding: 28px 15px;
+    font-size: 12px;
+}
+
+footer p {
+    color: #ccc;
+    margin-top: 8px;
+}
+
+/* Modals */
+
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 100;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    width: 100%;
+    max-width: 650px;
+    max-height: 94vh;
+    overflow-y: auto;
+    border-radius: 6px;
+    padding: 22px;
+}
+
+.modal.wide {
+    max-width: 850px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    font-size: 21px;
+}
+
+.close {
+    border: none;
+    background: transparent;
+    font-size: 28px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: white;
+}
+
+textarea.field {
+    min-height: 85px;
+    resize: vertical;
+}
+
+.full {
+    width: 100%;
+}
+
+.note {
+    background: var(--cream);
+    padding: 12px;
+    font-size: 12px;
+    margin: 13px 0;
+}
+
+.cod-box {
+    border: 1px solid #b8ddc5;
+    background: #f0fff5;
+    padding: 14px;
+    border-radius: 4px;
+    margin: 15px 0;
+}
+
+.cod-box strong {
+    color: var(--green);
+}
+
+.cart-row {
+    display: grid;
+    grid-template-columns: 65px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+}
+
+.cart-row img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+}
+
+.cart-row h4 {
+    font-size: 13px;
+}
+
+.cart-row p {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 5px;
+}
+
+.quantity button {
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--border);
+    background: var(--cream);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 19px;
+    font-weight: bold;
+    padding: 18px 0;
+}
+
+.status {
+    display: inline-block;
+    padding: 4px 9px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 3px;
+    background: #fff0cf;
+    color: #805a00;
+}
+
+.status.delivered {
+    background: #d9f6e3;
+    color: #146c37;
+}
+
+.status.cancelled {
+    background: #ffe1e1;
+    color: #a32121;
+}
+
+.status.pending {
+    background: #fff0cf;
+    color: #805a00;
+}
+
+.order-card {
+    border: 1px solid var(--border);
+    padding: 15px;
+    margin-bottom: 14px;
+    border-radius: 4px;
+}
+
+.order-card h3 {
+    font-size: 15px;
+}
+
+.order-card p {
+    font-size: 12px;
+    margin: 5px 0;
+    color: var(--muted);
+}
+
+.order-items {
+    margin: 12px 0;
+    padding: 10px;
+    background: var(--cream);
+    font-size: 12px;
+}
+
+.order-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.order-actions button {
+    font-size: 11px;
+}
+
+.confirmation {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.success-icon {
+    font-size: 54px;
+}
+
+.confirmation h2 {
+    margin: 10px 0;
+}
+
+.reference {
+    display: inline-block;
+    background: var(--cream);
+    padding: 10px 15px;
+    font-weight: bold;
+    margin: 15px 0;
+    overflow-wrap: anywhere;
+}
+
+.floating-whatsapp {
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    z-index: 40;
+    border-radius: 25px;
+    background: var(--green);
+    color: white;
+    padding: 13px 17px;
+    font-size: 13px;
+    font-weight: bold;
+    border: none;
+}
+
+@media(max-width: 900px) {
+    .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media(max-width: 600px) {
+    .header-inner {
+        padding: 12px;
+    }
+
+    .logo {
+        font-size: 15px;
+    }
+
+    .header-buttons .btn {
+        padding: 9px;
+        font-size: 11px;
+    }
+
+    .hero {
+        min-height: 390px;
+    }
+
+    .hero-inner {
+        padding: 30px 18px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .section {
+        padding: 40px 12px;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .product-info {
+        padding: 10px;
+    }
+
+    .product-info h3 {
+        font-size: 13px;
+    }
+
+    .price {
+        font-size: 15px;
+    }
+
+    .product-buttons {
+        flex-direction: column;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .modal {
+        padding: 16px;
+    }
+
+    .modal-header h2 {
+        font-size: 18px;
+    }
+
+    .cart-row {
+        grid-template-columns: 52px 1fr auto;
+        gap: 7px;
+    }
+
+    .cart-row img {
+        width: 52px;
+        height: 52px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+    PREMIUM FURNITURE • HOME DELIVERY • PAYMENT ON DELIVERY
+</div>
+
+<header>
+    <div class="header-inner">
+        <a href="#" class="logo">
+            COLLINS INTERIOR
+            <small>F U R N I T U R E S</small>
+        </a>
+
+        <div class="header-buttons">
+            <button class="btn outline" onclick="openCart()">
+                🛒 Cart <span id="cartCount">0</span>
+            </button>
+            <button class="btn" onclick="openOrderHistory()">
+                My Orders
+            </button>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-inner">
+        <span class="eyebrow">Designed for Better Living</span>
+        <h1>Furniture That Defines Your Lifestyle.</h1>
+        <p>
+            Discover elegant sofas, dining sets, centre tables, side tables,
+            mirrors and TV consoles for your home.
+        </p>
+        <button class="btn gold" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">
+            Explore Furniture →
+        </button>
+    </div>
+</section>
+
+<section class="section" id="shop">
+    <div class="container">
+        <div class="section-title">
+            <span class="eyebrow">Our Collection</span>
+            <h2>Find Your Perfect Furniture</h2>
+            <p>Choose your products and place your order with payment on delivery.</p>
+        </div>
+
+        <div class="categories" id="categories">
+            <button class="category-btn active" data-category="All">All Products</button>
+            <button class="category-btn" data-category="Sofas">Sofas</button>
+            <button class="category-btn" data-category="Dining Sets">Dining Sets</button>
+            <button class="category-btn" data-category="Centre Tables">Centre Tables</button>
+            <button class="category-btn" data-category="Side Tables">Side Tables</button>
+            <button class="category-btn" data-category="Mirrors">Mirrors</button>
+            <button class="category-btn" data-category="TV Consoles">TV Consoles</button>
+        </div>
+
+        <div class="toolbar">
+            <input id="searchInput" type="search"
+                placeholder="Search furniture..." autocomplete="off">
+
+            <select id="sortSelect">
+                <option value="default">Featured</option>
+                <option value="low">Price: Low to High</option>
+                <option value="high">Price: High to Low</option>
+            </select>
+        </div>
+
+        <div id="connectionMessage" class="note">
+            Connecting to the product catalogue...
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+    </div>
+</section>
+
+<section class="delivery-banner">
+    <h2>Order Today. Pay on Delivery. 🚚</h2>
+    <p>Choose your preferred delivery date during checkout. Our team will contact you to confirm your order and delivery arrangements.</p>
+</section>
+
+<footer>
+    <strong>COLLINS INTERIOR FURNITURES</strong>
+    <p>Premium furniture for your home and business.</p>
+    <p>© <span id="year"></span>Blessed collins Interior Furnitures</p>
+</footer>
+
+<button class="floating-whatsapp" onclick="contactSupport()">
+    WhatsApp Support
+</button>
+
+<!-- CART -->
+<div class="overlay" id="cartModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Your Shopping Cart</h2>
+            <button class="close" onclick="closeModal('cartModal')">&times;</button>
+        </div>
+
+        <div id="cartItems"></div>
+
+        <div class="total-row">
+            <span>Estimated Total</span>
+            <span id="cartTotal">₦0</span>
+        </div>
+
+        <div class="note">
+            Delivery fees, product availability and final prices will be confirmed by our team.
+        </div>
+
+        <button class="btn full gold" onclick="startCheckout()">
+            Proceed to Checkout
+        </button>
+    </div>
+</div>
+
+<!-- CHECKOUT -->
+<div class="overlay" id="checkoutModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Delivery & Checkout</h2>
+            <button class="close" onclick="closeModal('checkoutModal')">&times;</button>
+        </div>
+
+        <div class="cod-box">
+            <strong>🚚 PAYMENT ON DELIVERY</strong>
+            <p style="font-size:12px;margin-top:5px">
+                Place your order now. Payment is collected on delivery according
+                to the arrangements confirmed by our team.
+            </p>
+        </div>
+
+        <form id="checkoutForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="customerName">Full Name *</label>
+                    <input class="field" id="customerName"
+                        name="customerName" required maxlength="100"
+                        autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="customerPhone">Phone Number *</label>
+                    <input class="field" id="customerPhone"
+                        name="customerPhone" type="tel" required
+                        maxlength="25" autocomplete="tel"
+                        placeholder="e.g. 08012345678">
+                </div>
+
+                <div class="form-group">
+                    <label for="customerWhatsApp">WhatsApp Number *</label>
+                    <input class="field" id="customerWhatsApp"
+                        name="customerWhatsApp" type="tel" required
+                        maxlength="25" placeholder="WhatsApp contact number">
+                </div>
+
+                <div class="form-group">
+                    <label for="customerEmail">Email (Optional)</label>
+                    <input class="field" id="customerEmail"
+                        name="customerEmail" type="email"
+                        maxlength="150" autocomplete="email">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="deliveryAddress">Full Delivery Address *</label>
+                <textarea class="field" id="deliveryAddress"
+                    name="deliveryAddress" required maxlength="1000"
+                    autocomplete="street-address"
+                    placeholder="House number, street, area and landmarks"></textarea>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="deliveryState">State *</label>
+                    <select class="field" id="deliveryState" required>
+                        <option value="">Select state</option>
+                         <option>FCT Abuja</option>
+                         <option>Lagos</option>
+                         <option>Anambra</option>
+                        <option>Abia</option>
+                       
+                        <option>Adamawa</option>
+                        <option>Akwa Ibom</option>
+
+                        <option>Bauchi</option>
+                        <option>Bayelsa</option>
+                        <option>Benue</option>
+                        <option>Borno</option>
+                        <option>Cross River</option>
+                        <option>Delta</option>
+                        <option>Ebonyi</option>
+                        <option>Edo</option>
+                        <option>Ekiti</option>
+                        <option>Enugu</option>
+         
+                        <option>Gombe</option>
+                        <option>Imo</option>
+                        <option>Jigawa</option>
+                        <option>Kaduna</option>
+                        <option>Kano</option>
+                        <option>Katsina</option>
+                        <option>Kebbi</option>
+                        <option>Kogi</option>
+                        <option>Kwara</option>
+        
+                        <option>Nasarawa</option>
+                        <option>Niger</option>
+                        <option>Ogun</option>
+                        <option>Ondo</option>
+                        <option>Osun</option>
+                        <option>Oyo</option>
+                        <option>Plateau</option>
+                        <option>Rivers</option>
+                        <option>Sokoto</option>
+                        <option>Taraba</option>
+                        <option>Yobe</option>
+                        <option>Zamfara</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="deliveryCity">City / Town *</label>
+                    <input class="field" id="deliveryCity"
+                        required maxlength="100"
+                        placeholder="e.g. Ojo, Lagos">
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="deliveryDate">Preferred Delivery Date *</label>
+                    <input class="field" id="deliveryDate"
+                        type="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="deliveryTime">Preferred Time</label>
+                    <select class="field" id="deliveryTime">
+                        <option value="">Any suitable time</option>
+                        <option value="Morning">Morning</option>
+                        <option value="Afternoon">Afternoon</option>
+                        <option value="Evening">Evening</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="orderNotes">Additional Instructions (Optional)</label>
+                <textarea class="field" id="orderNotes"
+                    maxlength="1000"
+                    placeholder="Gate instructions, landmarks, preferred contact method, etc."></textarea>
+            </div>
+
+            <div class="note">
+                By placing this order, you confirm that your contact details
+                and delivery information are correct. Our team will contact
+                you to confirm availability, delivery arrangements and payment
+                on delivery.
+            </div>
+
+            <div class="total-row">
+                <span>Estimated Order Total</span>
+                <span id="checkoutTotal">₦0</span>
+            </div>
+
+            <button class="btn green full" id="placeOrderBtn" type="submit">
+                🚚 Place Order — Pay on Delivery
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ORDER CONFIRMATION -->
+<div class="overlay" id="confirmationModal">
+    <div class="modal">
+        <div class="confirmation">
+            <div class="success-icon">✅</div>
+            <h2>Order Placed Successfully!</h2>
+            <p id="confirmationMessage">
+                Your order has been recorded.
+            </p>
+
+            <div class="reference" id="confirmationReference"></div>
+
+            <div class="cod-box">
+                <strong>Payment Method: Payment on Delivery 🚚</strong>
+                <p style="font-size:12px;margin-top:5px">
+                    You have successfully placed your order. Our team will
+                    contact you with feedback regarding your delivery date
+                    and the delivery man assigned to your order.
+                </p>
+            </div>
+
+            <button class="btn full" onclick="openOrderHistoryFromConfirmation()">
+                View My Orders
+            </button>
+
+            <button class="btn outline full"
+                style="margin-top:10px"
+                onclick="closeModal('confirmationModal')">
+                Continue Shopping
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- CUSTOMER ORDER HISTORY -->
+<div class="overlay" id="historyModal">
+    <div class="modal wide">
+        <div class="modal-header">
+            <h2>My Order History</h2>
+            <button class="close" onclick="closeModal('historyModal')">&times;</button>
+        </div>
+
+        <div class="note">
+            We deliver by payment on delivery 🚚.
+        </div>
+
+        <div id="orderHistoryList"></div>
+    </div>
+</div>
+
+<!-- CANCELLATION REASON -->
+<div class="overlay" id="cancelModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Cancel Order</h2>
+            <button class="close" onclick="closeModal('cancelModal')">&times;</button>
+        </div>
+
+        <p style="font-size:13px;color:#777;margin-bottom:15px">
+            Tell us why you want to cancel. The request will be sent to the
+            order database for the admin to review.
+        </p>
+
+        <form id="cancelForm">
+            <input type="hidden" id="cancelOrderId">
+
+            <div class="form-group">
+                <label for="cancelReason">Cancellation Reason *</label>
+                <textarea class="field" id="cancelReason"
+                    maxlength="500" required
+                    placeholder="Enter your reason for cancellation"></textarea>
+            </div>
+
+            <button class="btn red full" type="submit">
+                Submit Cancellation Request
+            </button>
+        </form>
+    </div>
+</div>
+
+<div id="toast" style="
+    display:none;position:fixed;bottom:80px;left:50%;
+    transform:translateX(-50%);background:#211d18;color:white;
+    padding:12px 18px;border-radius:4px;z-index:200;
+    max-width:90%;font-size:13px;text-align:center;">
+</div>
+
+<script>
+"use strict";
+
+/*
+===========================================================
+SUPABASE CONFIGURATION
+===========================================================
+
+1. Open your Supabase project.
+2. Go to Project Settings -> API.
+3. Copy the Project URL and publishable key.
+4. Paste them below.
+
+NEVER put your service_role key in this file.
+
+This frontend expects the products, orders and order_items
+tables and the database permissions described after the code.
+*/
+
+const SUPABASE_URL = "https://cnlqokhwbvqqhawausos.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_KpNTUTgNQsHMi12R4up_AQ_UWtMXBv9";
+
+const CUSTOMER_ORDERS_KEY = "rif_customer_order_refs_v1";
+const CART_STORAGE_KEY = "rif_customer_cart_v1";
+
+const CATEGORY_IMAGES = {
+    "Sofas": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80",
+    "Dining Sets": "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=800&q=80",
+    "Centre Tables": "https://images.unsplash.com/photo-1499933374294-4584851497cc?auto=format&fit=crop&w=800&q=80",
+    "Side Tables": "https://images.unsplash.com/photo-1499933374294-4584851497cc?auto=format&fit=crop&w=800&q=80",
+    "Mirrors": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80",
+    "TV Consoles": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80"
+};
+
+let supabase = null;
+let products = [];
+let selectedCategory = "All";
+let cancelTargetOrder = null;
+
+function databaseConfigured() {
+    return SUPABASE_URL.startsWith("https://") &&
+        !SUPABASE_URL.includes("YOUR_SUPABASE") &&
+        SUPABASE_ANON_KEY.length > 20 &&
+        !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE");
+}
+
+function initializeDatabase() {
+    if (!databaseConfigured()) {
+        document.getElementById("connectionMessage").textContent =
+            "Setup required: add your Supabase project URL and publishable key in the script.";
+        renderProducts();
+        return false;
+    }
+
+    supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+    return true;
+}
+
+function money(value) {
+    return new Intl.NumberFormat("en-NG", {
+        style: "currency",
+        currency: "NGN",
+        maximumFractionDigits: 0
+    }).format(Number(value) || 0);
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function formatDate(value) {
+    if (!value) return "Not specified";
+
+    const date = new Date(value + (value.length === 10 ? "T12:00:00" : ""));
+    return Number.isNaN(date.getTime())
+        ? escapeHTML(value)
+        : date.toLocaleDateString("en-NG", {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        });
+}
+
+function safeImage(url, category) {
+    if (typeof url === "string" &&
+        (/^https:\/\/[a-z0-9.-]+\//i.test(url) ||
+         /^data:image\/(png|jpeg|jpg|webp);base64,/i.test(url))) {
+        return url;
+    }
+
+    return CATEGORY_IMAGES[category] || CATEGORY_IMAGES["Sofas"];
+}
+
+function getCart() {
+    try {
+        const data = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "[]");
+        return Array.isArray(data) ? data : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveCart(cart) {
+    try {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        return true;
+    } catch {
+        toast("Your browser could not save the cart.");
+        return false;
+    }
+}
+
+function getSavedOrderRefs() {
+    try {
+        const data = JSON.parse(localStorage.getItem(CUSTOMER_ORDERS_KEY) || "[]");
+        return Array.isArray(data) ? data : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveOrderRef(order) {
+    const existing = getSavedOrderRefs();
+
+    if (!existing.some(item => item.id === order.id)) {
+        existing.unshift({
+            id: order.id,
+            order_number: order.order_number
+        });
+    }
+
+    localStorage.setItem(CUSTOMER_ORDERS_KEY, JSON.stringify(existing));
+}
+
+async function loadProducts() {
+    if (!supabase) {
+        renderProducts();
+        return;
+    }
+
+    const message = document.getElementById("connectionMessage");
+    message.textContent = "Loading furniture catalogue...";
+
+    try {
+        const { data, error } = await supabase
+            .from("products")
+            .select("id,name,category,description,price,image_url,image_path,active")
+            .eq("active", true)
+            .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        products = (data || []).map(product => ({
+            ...product,
+            image: product.image_url || CATEGORY_IMAGES[product.category]
+        }));
+
+        message.textContent = products.length
+            ? "Browse our available furniture and place your order."
+            : "No products are currently available. Please check back soon.";
+
+        renderProducts();
+    } catch (error) {
+        console.error("Product loading failed:", error);
+        message.textContent =
+            "Could not load products. Check your Supabase setup and database permissions.";
+        renderProducts();
+    }
+}
+
+function renderProducts() {
+    const grid = document.getElementById("productGrid");
+
+    let filtered = products.filter(product => {
+        const text = [
+            product.name,
+            product.category,
+            product.description
+        ].join(" ").toLowerCase();
+
+        return text.includes(
+            document.getElementById("searchInput").value.trim().toLowerCase()
+        ) &&
+        (selectedCategory === "All" || product.category === selectedCategory);
+    });
+
+    const sort = document.getElementById("sortSelect").value;
+
+    if (sort === "low") filtered.sort((a, b) => a.price - b.price);
+    if (sort === "high") filtered.sort((a, b) => b.price - a.price);
+
+    if (!filtered.length) {
+        grid.innerHTML = `
+            <div class="empty">
+                <h3>No products to display</h3>
+                <p>Products will appear here after they are added to the database.</p>
+            </div>`;
+        return;
+    }
+
+    grid.innerHTML = filtered.map(product => `
+        <article class="product-card">
+            <img
+                src="${escapeHTML(safeImage(product.image, product.category))}"
+                alt="${escapeHTML(product.name)}"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='${CATEGORY_IMAGES["Sofas"]}'">
+
+            <div class="product-info">
+                <span class="product-category">${escapeHTML(product.category)}</span>
+                <h3>${escapeHTML(product.name)}</h3>
+                <p>${escapeHTML(product.description || "Contact us for product details.")}</p>
+                <div class="price">${money(product.price)}</div>
+
+                <div class="product-buttons">
+                    <button class="btn" onclick="addToCart('${escapeHTML(product.id)}')">
+                        Add to Cart
+                    </button>
+                    <button class="btn outline"
+                        onclick="buyNow('${escapeHTML(product.id)}')">
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+        </article>
+    `).join("");
+}
+
+function setCategory(category) {
+    selectedCategory = category;
+
+    document.querySelectorAll(".category-btn").forEach(button => {
+        button.classList.toggle("active", button.dataset.category === category);
+    });
+
+    renderProducts();
+}
+
+document.querySelectorAll(".category-btn").forEach(button => {
+    button.addEventListener("click", () => setCategory(button.dataset.category));
+});
+
+document.getElementById("searchInput").addEventListener("input", renderProducts);
+document.getElementById("sortSelect").addEventListener("change", renderProducts);
+
+function addToCart(id) {
+    const product = products.find(item => String(item.id) === String(id));
+
+    if (!product) {
+        toast("This product is unavailable.");
+        return;
+    }
+
+    const cart = getCart();
+    const existing = cart.find(item => String(item.id) === String(id));
+
+    if (existing) {
+        existing.quantity = Math.min(99, existing.quantity + 1);
+    } else {
+        cart.push({ id: product.id, quantity: 1 });
+    }
+
+    if (saveCart(cart)) {
+        updateCartCount();
+        toast("Product added to cart.");
+    }
+}
+
+function buyNow(id) {
+    const product = products.find(item => String(item.id) === String(id));
+    if (!product) return;
+
+    saveCart([{ id: product.id, quantity: 1 }]);
+    updateCartCount();
+    startCheckout();
+}
+
+function updateCartCount() {
+    const count = getCart().reduce((sum, item) => {
+        return sum + Math.max(0, Number(item.quantity) || 0);
+    }, 0);
+
+    document.getElementById("cartCount").textContent = count;
+}
+
+function changeQuantity(id, change) {
+    let cart = getCart();
+    const item = cart.find(entry => String(entry.id) === String(id));
+
+    if (!item) return;
+
+    item.quantity = Number(item.quantity) + change;
+
+    if (item.quantity <= 0) {
+        cart = cart.filter(entry => String(entry.id) !== String(id));
+    }
+
+    saveCart(cart);
+    updateCartCount();
+    renderCart();
+}
+
+function getCartDetails() {
+    const cart = getCart();
+
+    return cart.map(item => {
+        const product = products.find(entry => String(entry.id) === String(item.id));
+
+        if (!product) return null;
+
+        return {
+            product,
+            quantity: Math.max(1, Math.min(99, Number(item.quantity) || 1))
+        };
+    }).filter(Boolean);
+}
+
+function cartTotal() {
+    return getCartDetails().reduce((sum, item) => {
+        return sum + Number(item.product.price) * item.quantity;
+    }, 0);
+}
+
+function renderCart() {
+    const container = document.getElementById("cartItems");
+    const details = getCartDetails();
+
+    if (!details.length) {
+        container.innerHTML = `
+            <div class="empty">
+                <h3>Your cart is empty</h3>
+                <p>Browse the furniture catalogue to add products.</p>
+            </div>`;
+    } else {
+        container.innerHTML = details.map(({ product, quantity }) => `
+            <div class="cart-row">
+                <img src="${escapeHTML(safeImage(product.image, product.category))}"
+                    alt="${escapeHTML(product.name)}">
+
+                <div>
+                    <h4>${escapeHTML(product.name)}</h4>
+                    <p>${money(product.price)} each</p>
+                    <div class="quantity">
+                        <button onclick="changeQuantity('${escapeHTML(product.id)}',-1)">−</button>
+                        <span>${quantity}</span>
+                        <button onclick="changeQuantity('${escapeHTML(product.id)}',1)">+</button>
+                    </div>
+                </div>
+
+                <strong style="font-size:12px">
+                    ${money(product.price * quantity)}
+                </strong>
+            </div>
+        `).join("");
+    }
+
+    document.getElementById("cartTotal").textContent = money(cartTotal());
+}
+
+function openCart() {
+    renderCart();
+    openModal("cartModal");
+}
+
+function startCheckout() {
+    if (!supabase) {
+        toast("Connect Supabase before placing a database order.");
+        closeModal("cartModal");
+        return;
+    }
+
+    if (!getCartDetails().length) {
+        toast("Add at least one product to your cart.");
+        return;
+    }
+
+    closeModal("cartModal");
+
+    const today = new Date();
+    const localToday = new Date(
+        today.getTime() - today.getTimezoneOffset() * 60000
+    ).toISOString().slice(0, 10);
+
+    document.getElementById("deliveryDate").min = localToday;
+    document.getElementById("checkoutTotal").textContent = money(cartTotal());
+
+    openModal("checkoutModal");
+}
+
+function normalisePhone(value) {
+    return String(value || "").trim().replace(/[^\d+]/g, "");
+}
+
+function validPhone(value) {
+    const digits = normalisePhone(value).replace(/\D/g, "");
+    return digits.length >= 10 && digits.length <= 15;
+}
+
+function generateOrderNumber() {
+    const date = new Date();
+    const stamp = [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, "0"),
+        String(date.getDate()).padStart(2, "0")
+    ].join("");
+
+    const random = Math.random().toString(36).slice(2, 8).toUpperCase();
+
+    return "RIF-" + stamp + "-" + random;
+}
+
+/*
+IMPORTANT:
+This function assumes the database has appropriate INSERT policies
+and server-side protections. A production implementation should use
+a secure server-side order-placement function that reads product prices
+from the database and calculates the total itself.
+
+The browser price is not trusted as a payment or accounting authority.
+*/
+
+document.getElementById("checkoutForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (!supabase) {
+        toast("The order database is not connected.");
+        return;
+    }
+
+    const button = document.getElementById("placeOrderBtn");
+    const details = getCartDetails();
+
+    if (!details.length) {
+        toast("Your cart is empty.");
+        closeModal("checkoutModal");
+        return;
+    }
+
+    const name = document.getElementById("customerName").value.trim();
+    const phone = normalisePhone(document.getElementById("customerPhone").value);
+    const whatsapp = normalisePhone(document.getElementById("customerWhatsApp").value);
+    const email = document.getElementById("customerEmail").value.trim();
+    const address = document.getElementById("deliveryAddress").value.trim();
+    const state = document.getElementById("deliveryState").value;
+    const city = document.getElementById("deliveryCity").value.trim();
+    const deliveryDate = document.getElementById("deliveryDate").value;
+    const deliveryTime = document.getElementById("deliveryTime").value;
+    const notes = document.getElementById("orderNotes").value.trim();
+
+    if (!validPhone(phone) || !validPhone(whatsapp)) {
+        toast("Enter valid phone and WhatsApp numbers.");
+        return;
+    }
+
+    const today = new Date();
+    const localToday = new Date(
+        today.getTime() - today.getTimezoneOffset() * 60000
+    ).toISOString().slice(0, 10);
+
+    if (deliveryDate < localToday) {
+        toast("Choose today or a future delivery date.");
+        return;
+    }
+
+    if (details.some(item => !Number.isFinite(Number(item.product.price)) ||
+        Number(item.product.price) < 0)) {
+        toast("One or more products have an invalid price.");
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Submitting Order...";
+
+    let orderId = null;
+
+    try {
+        const orderNumber = generateOrderNumber();
+
+        /*
+        Customer information is saved in the order record.
+        payment_method = payment_on_delivery
+        status = pending
+        */
+
+        const orderPayload = {
+            order_number: orderNumber,
+            customer_name: name,
+            customer_phone: phone,
+            customer_whatsapp: whatsapp,
+            customer_email: email || null,
+            delivery_address: address,
+            delivery_state: state,
+            delivery_city: city,
+            delivery_date: deliveryDate,
+            delivery_time: deliveryTime || null,
+            notes: notes || null,
+            payment_method: "payment_on_delivery",
+            payment_status: "unpaid",
+            status: "pending",
+            total_amount: details.reduce((sum, item) => {
+                return sum + Number(item.product.price) * item.quantity;
+            }, 0)
+        };
+
+        const { data: createdOrder, error: orderError } = await supabase
+            .from("orders")
+            .insert(orderPayload)
+            .select("id,order_number,status,total_amount,payment_method")
+            .single();
+
+        if (orderError) throw orderError;
+
+        orderId = createdOrder.id;
+
+        const orderItems = details.map(({ product, quantity }) => ({
+            order_id: createdOrder.id,
+            product_id: product.id,
+            product_name: product.name,
+            unit_price: Number(product.price),
+            quantity: quantity,
+            subtotal: Number(product.price) * quantity
+        }));
+
+        const { error: itemError } = await supabase
+            .from("order_items")
+            .insert(orderItems);
+
+        if (itemError) {
+            /*
+            Attempt to remove the incomplete order.
+            Database policies must permit this operation or a server-side
+            atomic order-placement function should be used instead.
+            */
+            console.error("Order items could not be saved:", itemError);
+
+            try {
+                await supabase.from("orders")
+                    .delete()
+                    .eq("id", createdOrder.id);
+            } catch (cleanupError) {
+                console.error("Order cleanup failed:", cleanupError);
+            }
+
+            throw new Error(
+                "Your order items could not be saved. Please contact support before retrying."
+            );
+        }
+
+        saveOrderRef({
+            id: createdOrder.id,
+            order_number: createdOrder.order_number
+        });
+
+        /*
+        Clear the cart only after the order and all items are saved.
+        */
+
+        saveCart([]);
+        updateCartCount();
+        document.getElementById("checkoutForm").reset();
+
+        closeModal("checkoutModal");
+
+        document.getElementById("confirmationReference").textContent =
+            "Order Reference: " + createdOrder.order_number;
+
+        document.getElementById("confirmationMessage").textContent =
+            "Your order has been placed successfully. Payment on Delivery 🚚 has been selected. Our team will contact you with feedback on your chosen delivery date and delivery arrangements.";
+
+        openModal("confirmationModal");
+
+    } catch (error) {
+        console.error("Checkout error:", error);
+
+        /*
+        Do not claim the order failed if it may already exist.
+        The customer should contact support using any reference shown
+        in their database or check with the store before retrying.
+        */
+        toast(error.message ||
+            "We could not confirm your order. Please contact support before trying again.");
+    } finally {
+        button.disabled = false;
+        button.textContent = "🚚 Place Order — Pay on Delivery";
+    }
+});
+
+async function openOrderHistory() {
+    if (!supabase) {
+        toast("Connect the database to view order status.");
+        return;
+    }
+
+    openModal("historyModal");
+    await loadOrderHistory();
+}
+
+async function openOrderHistoryFromConfirmation() {
+    closeModal("confirmationModal");
+    await openOrderHistory();
+}
+
+async function loadOrderHistory() {
+    const container = document.getElementById("orderHistoryList");
+    const savedOrders = getSavedOrderRefs();
+
+    if (!savedOrders.length) {
+        container.innerHTML = `
+            <div class="empty">
+                <h3>No orders found on this device</h3>
+                <p>Orders you place using this browser will appear here.</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = "<p>Loading your orders...</p>";
+
+    try {
+        const ids = savedOrders.map(item => item.id);
+
+        /*
+        The database must restrict each customer's access to their own
+        orders. This browser-only implementation does not provide secure
+        cross-device authentication or private order access by itself.
+        */
+
+        const { data: orderData, error: orderError } = await supabase
+            .from("orders")
+            .select("id,order_number,status,total_amount,payment_method,payment_status,delivery_date,delivery_time,created_at")
+            .in("id", ids)
+            .order("created_at", { ascending: false });
+
+        if (orderError) throw orderError;
+
+        const orders = orderData || [];
+
+        if (!orders.length) {
+            container.innerHTML = `
+                <div class="empty">
+                    <h3>Orders are not accessible</h3>
+                    <p>Check the customer order access policies in Supabase.</p>
+                </div>`;
+            return;
+        }
+
+        const orderIds = orders.map(order => order.id);
+
+        const { data: itemData, error: itemError } = await supabase
+            .from("order_items")
+            .select("order_id,product_name,quantity,unit_price,subtotal")
+            .in("order_id", orderIds);
+
+        if (itemError) throw itemError;
+
+        const items = itemData || [];
+
+        container.innerHTML = orders.map(order => {
+            const orderItems = items.filter(item =>
+                String(item.order_id) === String(order.id)
+            );
+
+            const status = String(order.status || "pending").toLowerCase();
+
+            const badgeClass = status === "delivered"
+                ? "delivered"
+                : status === "cancelled"
+                    ? "cancelled"
+                    : "pending";
+
+            const canCancel = ["pending", "confirmed"].includes(status);
+
+            return `
+                <article class="order-card">
+                    <h3>${escapeHTML(order.order_number)}</h3>
+                    <p>Placed: ${formatDate(order.created_at)}</p>
+                    <p>Status: <span class="status ${badgeClass}">
+                        ${escapeHTML(status.replaceAll("_", " ").toUpperCase())}
+                    </span></p>
+                    <p>Payment: PAYMENT ON DELIVERY 🚚</p>
+                    <p>Preferred delivery: ${formatDate(order.delivery_date)}
+                        ${order.delivery_time ? " · " + escapeHTML(order.delivery_time) : ""}
+                    </p>
+
+                    <div class="order-items">
+                        <strong>Items ordered</strong>
+                        ${orderItems.map(item => `
+                            <p>
+                                ${escapeHTML(item.product_name)} × ${item.quantity}
+                                — ${money(item.subtotal)}
+                            </p>
+                        `).join("")}
+                    </div>
+
+                    <p><strong>Estimated total: ${money(order.total_amount)}</strong></p>
+
+                    ${status === "delivered"
+                        ? "<p>Your order has been marked as delivered.</p>"
+                        : status === "cancelled"
+                            ? "<p>This order has been cancelled.</p>"
+                            : "<p>Your order has been recorded. Our team will contact you with delivery feedback.</p>"
+                    }
+
+                    <div class="order-actions">
+                        ${canCancel ? `
+                            <button class="btn red"
+                                onclick="requestCancellation('${escapeHTML(order.id)}')">
+                                Request Cancellation
+                            </button>` : ""
+                        }
+                        <button class="btn green"
+                            onclick="contactOrderSupport('${escapeHTML(order.order_number)}')">
+                            Contact Support
+                        </button>
+                    </div>
+                </article>`;
+        }).join("");
+
+    } catch (error) {
+        console.error("Order history error:", error);
+
+        container.innerHTML = `
+            <div class="empty">
+                <h3>Unable to load order history</h3>
+                <p>Check your Supabase connection and database access policies.</p>
+            </div>`;
+    }
+}
+
+function requestCancellation(orderId) {
+    cancelTargetOrder = orderId;
+    document.getElementById("cancelOrderId").value = orderId;
+    document.getElementById("cancelReason").value = "";
+
+    closeModal("historyModal");
+    openModal("cancelModal");
+}
+
+document.getElementById("cancelForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (!supabase) {
+        toast("Database connection unavailable.");
+        return;
+    }
+
+    const orderId = document.getElementById("cancelOrderId").value;
+    const reason = document.getElementById("cancelReason").value.trim();
+
+    if (!orderId || !reason) {
+        toast("Enter your cancellation reason.");
+        return;
+    }
+
+    /*
+    This operation needs a secure database function or customer-specific
+    authorization policy. Do not create a public policy that lets anyone
+    cancel arbitrary orders by guessing an order ID.
+    */
+
+    try {
+        const { data, error } = await supabase.rpc("request_order_cancellation", {
+            p_order_id: orderId,
+            p_reason: reason
+        });
+
+        if (error) throw error;
+
+        closeModal("cancelModal");
+
+        toast("Cancellation request submitted. Your order history will show the database status.");
+
+        await openOrderHistory();
+
+    } catch (error) {
+        console.error("Cancellation request failed:", error);
+
+        toast(
+            "Cancellation was not confirmed. The secure request_order_cancellation database function must be configured."
+        );
+    }
+});
+
+function contactOrderSupport(orderNumber) {
+    const settings = getStoreSettings();
+
+    if (!settings.whatsapp) {
+        toast("Store WhatsApp support has not been configured.");
+        return;
+    }
+
+    const message =
+        "Hello, I am contacting you about my furniture order " +
+        orderNumber +
+        ". Please provide an update on confirmation and delivery.";
+
+    window.open(
+        "https://wa.me/" + settings.whatsapp +
+        "?text=" + encodeURIComponent(message),
+        "_blank",
+        "noopener,noreferrer"
+    );
+}
+
+function getStoreSettings() {
+    /*
+    Replace this placeholder with your store's WhatsApp number.
+    Digits only, including the country code.
+    */
+
+    return {
+        whatsapp: "2347013550569"
+    };
+}
+
+function contactSupport() {
+    const settings = getStoreSettings();
+
+    const message =
+        "Hello, I need assistance with furniture products, an order or delivery.";
+
+    window.open(
+        "https://wa.me/" + settings.whatsapp +
+        "?text=" + encodeURIComponent(message),
+        "_blank",
+        "noopener,noreferrer"
+    );
+}
+
+function openModal(id) {
+    document.getElementById(id).classList.add("show");
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove("show");
+}
+
+document.querySelectorAll(".overlay").forEach(overlay => {
+    overlay.addEventListener("click", event => {
+        if (event.target === overlay) {
+            overlay.classList.remove("show");
+        }
+    });
+});
+
+function toast(message) {
+    const element = document.getElementById("toast");
+    element.textContent = message;
+    element.style.display = "block";
+
+    clearTimeout(toast.timer);
+
+    toast.timer = setTimeout(() => {
+        element.style.display = "none";
+    }, 4000);
+}
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+const configured = initializeDatabase();
+
+updateCartCount();
+
+if (configured) {
+    loadProducts();
+} else {
+    renderProducts();
+}
+
+/*
+The delivery date must not be in the past.
+The same check is repeated during checkout.
+*/
+
+const dateInput = document.getElementById("deliveryDate");
+
+const now = new Date();
+dateInput.min = new Date(
+    now.getTime() - now.getTimezoneOffset() * 60000
+).toISOString().slice(0, 10);
+</script>
+
+</body>
+</html>

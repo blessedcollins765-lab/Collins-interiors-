@@ -1,0 +1,2001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Furniture Admin Dashboard</title>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Icons -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root {
+    --primary: #172c24;
+    --accent: #c7a56b;
+    --background: #f4f5f3;
+    --white: #ffffff;
+    --border: #e2e5e1;
+    --text: #202820;
+    --muted: #707970;
+    --danger: #c0392b;
+    --success: #23834c;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+button, input, select, textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* LOGIN */
+
+.login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: var(--primary);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 15px 50px #0002;
+}
+
+.login-card h1 {
+    margin-bottom: 8px;
+}
+
+.login-card p {
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+/* GENERAL */
+
+.topbar {
+    background: var(--primary);
+    color: white;
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.brand {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.brand span {
+    color: var(--accent);
+}
+
+.topbar small {
+    color: #d9e0da;
+}
+
+.container {
+    max-width: 1450px;
+    margin: auto;
+    padding: 22px;
+}
+
+.panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.panel h2 {
+    margin-top: 0;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.stat {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.stat i {
+    font-size: 21px;
+    color: var(--accent);
+}
+
+.stat h3 {
+    font-size: 25px;
+    margin: 13px 0 5px;
+    overflow-wrap: anywhere;
+}
+
+.stat p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 13px;
+}
+
+.nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.nav button {
+    border: 1px solid var(--border);
+    background: white;
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: var(--text);
+}
+
+.nav button.active {
+    background: var(--primary);
+    color: white;
+}
+
+/* FORMS */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.field {
+    margin-bottom: 14px;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+input, select, textarea {
+    width: 100%;
+    border: 1px solid #d9ded9;
+    padding: 12px;
+    border-radius: 7px;
+    background: white;
+    color: var(--text);
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.btn {
+    border: 0;
+    padding: 11px 15px;
+    border-radius: 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-gold {
+    background: var(--accent);
+    color: #172016;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-light {
+    background: #eef1ed;
+    color: #26342b;
+}
+
+.btn-small {
+    padding: 8px 10px;
+    font-size: 12px;
+    margin: 2px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.message {
+    margin: 12px 0;
+    padding: 12px;
+    border-radius: 8px;
+    background: #edf5ed;
+    color: #245a32;
+    display: none;
+    overflow-wrap: anywhere;
+}
+
+.message.error {
+    background: #fff0ee;
+    color: #a22d22;
+}
+
+.image-preview {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin-top: 10px;
+    display: none;
+}
+
+/* TABLES */
+
+.table-wrap {
+    overflow-x: auto;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+th, td {
+    padding: 13px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+    font-size: 13px;
+}
+
+th {
+    background: #f5f7f4;
+    white-space: nowrap;
+}
+
+td strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.product-image {
+    width: 65px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #eee;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    background: #eef1ed;
+    white-space: nowrap;
+}
+
+.badge.pending,
+.badge.cancellation_requested {
+    background: #fff0cb;
+    color: #775000;
+}
+
+.badge.delivered {
+    background: #dff5e6;
+    color: #176b37;
+}
+
+.badge.cancelled {
+    background: #ffe4e1;
+    color: #9d3026;
+}
+
+.badge.processing,
+.badge.shipped {
+    background: #e2ecff;
+    color: #234b8b;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.toolbar input,
+.toolbar select {
+    max-width: 300px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.order-detail {
+    background: #f7f8f6;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.empty {
+    padding: 30px;
+    text-align: center;
+    color: var(--muted);
+}
+
+footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 25px;
+}
+
+@media (max-width: 850px) {
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .container {
+        padding: 13px;
+    }
+
+    .panel {
+        padding: 14px;
+    }
+}
+
+@media (max-width: 500px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .field.full {
+        grid-column: auto;
+    }
+
+    .topbar {
+        padding: 15px;
+    }
+
+    .brand {
+        font-size: 17px;
+    }
+
+    .stat {
+        padding: 14px;
+    }
+
+    .stat h3 {
+        font-size: 20px;
+    }
+
+    .nav button {
+        flex: 1 1 40%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN SCREEN -->
+
+<section id="loginScreen" class="login-screen">
+    <div class="login-card">
+        <h1>Furniture <span style="color:#c7a56b">Admin</span></h1>
+
+        <p>
+            Sign in with your authorized administrator account
+            to manage products and customer orders.
+        </p>
+
+        <div id="loginMessage" class="message"></div>
+
+        <form id="loginForm">
+            <div class="field">
+                <label for="loginEmail">Administrator email</label>
+                <input
+                    id="loginEmail"
+                    type="email"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="loginPassword">Password</label>
+                <input
+                    id="loginPassword"
+                    type="password"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <button class="btn btn-primary" type="submit" style="width:100%">
+                <i class="fa-solid fa-lock"></i> Sign In
+            </button>
+        </form>
+
+        <p class="muted">
+            Administrator accounts must be created and authorized in Supabase.
+        </p>
+    </div>
+</section>
+
+
+<!-- ADMIN APPLICATION -->
+
+<div id="adminApp" class="hidden">
+
+    <header class="topbar">
+        <div>
+            <div class="brand">Furniture <span>Control Panel</span></div>
+            <small>Products · Orders · Deliveries</small>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <span id="adminEmail" style="font-size:12px"></span>
+            <button id="refreshBtn" class="btn btn-gold">
+                <i class="fa-solid fa-rotate"></i> Refresh
+            </button>
+            <button id="logoutBtn" class="btn btn-light">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <div id="globalMessage" class="message"></div>
+
+        <!-- DASHBOARD STATS -->
+
+        <section class="stats">
+            <div class="stat">
+                <i class="fa-solid fa-box"></i>
+                <h3 id="statProducts">0</h3>
+                <p>Active products</p>
+            </div>
+
+            <div class="stat">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h3 id="statOrders">0</h3>
+                <p>Total orders</p>
+            </div>
+
+            <div class="stat">
+                <i class="fa-solid fa-clock"></i>
+                <h3 id="statPending">0</h3>
+                <p>Pending orders</p>
+            </div>
+
+            <div class="stat">
+                <i class="fa-solid fa-naira-sign"></i>
+                <h3 id="statRevenue">₦0</h3>
+                <p>Value of delivered orders</p>
+            </div>
+        </section>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="nav">
+            <button class="active" data-tab="dashboard">
+                <i class="fa-solid fa-chart-line"></i> Dashboard
+            </button>
+
+            <button data-tab="products">
+                <i class="fa-solid fa-couch"></i> Products
+            </button>
+
+            <button data-tab="orders">
+                <i class="fa-solid fa-receipt"></i> Orders
+            </button>
+        </nav>
+
+
+        <!-- DASHBOARD -->
+
+        <section id="tab-dashboard" class="tab-content">
+
+            <div class="panel">
+                <h2>Business overview</h2>
+                <p class="muted">
+                    Review recent orders, customer requests, and delivery progress.
+                </p>
+
+                <div class="actions">
+                    <button class="btn btn-primary" data-goto="orders">
+                        View Orders
+                    </button>
+
+                    <button class="btn btn-gold" data-goto="products">
+                        Add Furniture
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="section-title">
+                    <h2>Recent Orders</h2>
+                    <button class="btn btn-light" id="recentRefreshBtn">
+                        Reload
+                    </button>
+                </div>
+
+                <div id="recentOrders" class="empty">
+                    Loading orders...
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- PRODUCTS -->
+
+        <section id="tab-products" class="tab-content hidden">
+
+            <div class="panel">
+                <div class="section-title">
+                    <h2 id="productFormTitle">Add New Product</h2>
+                    <button id="resetProductBtn" class="btn btn-light">
+                        Clear Form
+                    </button>
+                </div>
+
+                <p class="muted">
+                    Upload images to your Supabase Storage bucket.
+                    Prices are entered in Nigerian naira.
+                </p>
+
+                <div id="productMessage" class="message"></div>
+
+                <form id="productForm">
+
+                    <input type="hidden" id="productId">
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label for="productName">Product name *</label>
+                            <input id="productName" required maxlength="150"
+                                   placeholder="e.g. Luxury Centre Table">
+                        </div>
+
+                        <div class="field">
+                            <label for="productCategory">Category *</label>
+                            <select id="productCategory" required>
+                                <option value="">Select category</option>
+                                <option>Centre Tables</option>
+                                <option>Dining Sets</option>
+                                <option>Side Tables</option>
+                                <option>Sofas</option>
+                                <option>Mirrors</option>
+                                <option>TV Consoles</option>
+                                <option>Bedroom Furniture</option>
+                                <option>Office Furniture</option>
+                                <option>Other Furniture</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="productPrice">Price in naira *</label>
+                            <input id="productPrice" type="number"
+                                   min="0" step="0.01" required
+                                   placeholder="250000">
+                        </div>
+
+                        <div class="field">
+                            <label for="productActive">Product visibility</label>
+                            <select id="productActive">
+                                <option value="true">Active — show in store</option>
+                                <option value="false">Inactive — hide in store</option>
+                            </select>
+                        </div>
+
+                        <div class="field full">
+                            <label for="productDescription">Description</label>
+                            <textarea id="productDescription"
+                                placeholder="Describe materials, dimensions, colours and features"></textarea>
+                        </div>
+
+                        <div class="field full">
+                            <label for="productImage">Product image</label>
+                            <input id="productImage" type="file"
+                                   accept="image/*">
+
+                            <img id="imagePreview" class="image-preview"
+                                 alt="Selected product image">
+
+                            <p class="muted">
+                                Leave this empty when editing if you want
+                                to keep the existing image.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" id="saveProductBtn"
+                                class="btn btn-primary">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Save Product
+                        </button>
+
+                        <button type="button" id="cancelEditBtn"
+                                class="btn btn-light hidden">
+                            Cancel Editing
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+
+            <div class="panel">
+                <div class="toolbar">
+                    <h2>Product Inventory</h2>
+
+                    <input id="productSearch"
+                           placeholder="Search furniture...">
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Visibility</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="productsTable">
+                            <tr>
+                                <td colspan="6">Loading products...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ORDERS -->
+
+        <section id="tab-orders" class="tab-content hidden">
+
+            <div class="panel">
+
+                <div class="toolbar">
+                    <h2>Customer Orders</h2>
+
+                    <input id="orderSearch"
+                           placeholder="Search order, name or phone...">
+
+                    <select id="orderStatusFilter">
+                        <option value="">All statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="cancellation_requested">
+                            Cancellation requested
+                        </option>
+                    </select>
+                </div>
+
+                <p class="muted">
+                    Select an order to view its full details and update its status.
+                </p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Customer</th>
+                                <th>Delivery</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="ordersTable">
+                            <tr>
+                                <td colspan="7">Loading orders...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div id="orderDetailsPanel" class="panel hidden">
+                <div class="section-title">
+                    <h2>Order Details</h2>
+
+                    <button id="closeOrderDetails" class="btn btn-light">
+                        Close
+                    </button>
+                </div>
+
+                <div id="orderDetailsContent"></div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        Furniture Business Administration Panel
+    </footer>
+
+</div>
+
+
+<script>
+/* =========================================================
+   CONFIGURATION
+   Replace these two values with your Supabase project details.
+========================================================= */
+
+const SUPABASE_URL = "https://cnlqokhwbvqqhawausos.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_KpNTUTgNQsHMi12R4up_AQ_UWtMXBv9";
+
+/*
+   Create this bucket in Supabase Storage:
+   furniture-images
+
+   This code expects the following tables:
+   products
+   orders
+   order_items
+
+   It expects the columns used in the customer store code.
+*/
+
+const STORAGE_BUCKET = "furniture-images";
+
+const { createClient } = supabase;
+
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+let currentProducts = [];
+let currentOrders = [];
+let selectedOrder = null;
+let existingImageUrl = "";
+let existingImagePath = "";
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[char]);
+}
+
+function formatMoney(value) {
+    return new Intl.NumberFormat("en-NG", {
+        style: "currency",
+        currency: "NGN",
+        maximumFractionDigits: 2
+    }).format(Number(value || 0));
+}
+
+function formatDate(value) {
+    if (!value) return "Not provided";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return String(value);
+    }
+
+    return date.toLocaleString("en-NG", {
+        dateStyle: "medium",
+        timeStyle: "short"
+    });
+}
+
+function normalisePhone(phone) {
+    /*
+      WhatsApp normally expects an international number without "+".
+      For Nigerian local numbers beginning with 0, replace the first 0
+      with 234. Confirm the customer's country before sending.
+    */
+
+    let number = String(phone || "").replace(/\D/g, "");
+
+    if (number.startsWith("0")) {
+        number = "234" + number.slice(1);
+    }
+
+    return number;
+}
+
+function showMessage(id, text, isError = false) {
+    const box = $(id);
+
+    box.textContent = text;
+    box.classList.toggle("error", isError);
+    box.style.display = "block";
+
+    window.setTimeout(() => {
+        box.style.display = "none";
+    }, 7000);
+}
+
+function statusBadge(status) {
+    const safeStatus = String(status || "pending")
+        .toLowerCase()
+        .replace(/[^a-z_]/g, "");
+
+    return `
+        <span class="badge ${safeStatus}">
+            ${escapeHTML(status || "pending")}
+        </span>
+    `;
+}
+
+function setButtonLoading(button, loading, text) {
+    if (loading) {
+        button.dataset.originalText = button.innerHTML;
+        button.disabled = true;
+        button.textContent = text || "Please wait...";
+    } else {
+        button.disabled = false;
+
+        if (button.dataset.originalText) {
+            button.innerHTML = button.dataset.originalText;
+            delete button.dataset.originalText;
+        }
+    }
+}
+
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+
+function showLogin() {
+    $("loginScreen").classList.remove("hidden");
+    $("adminApp").classList.add("hidden");
+}
+
+function showAdmin(user) {
+    $("loginScreen").classList.add("hidden");
+    $("adminApp").classList.remove("hidden");
+
+    $("adminEmail").textContent = user.email || "Administrator";
+
+    loadAllData();
+}
+
+$("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const button = event.submitter;
+    setButtonLoading(button, true, "Signing in...");
+
+    try {
+        const { data, error } = await db.auth.signInWithPassword({
+            email: $("loginEmail").value.trim(),
+            password: $("loginPassword").value
+        });
+
+        if (error) throw error;
+
+        if (!data.user) {
+            throw new Error("Unable to identify administrator.");
+        }
+
+        /*
+          IMPORTANT:
+          Supabase login alone does not grant admin privileges.
+          Your database RLS policies must authorize this user.
+        */
+
+        showAdmin(data.user);
+
+    } catch (error) {
+        showMessage("loginMessage", error.message, true);
+    } finally {
+        setButtonLoading(button, false);
+    }
+});
+
+$("logoutBtn").addEventListener("click", async () => {
+    const { error } = await db.auth.signOut();
+
+    if (error) {
+        showMessage("globalMessage", error.message, true);
+        return;
+    }
+
+    showLogin();
+});
+
+db.auth.onAuthStateChange((event, session) => {
+    if (session?.user) {
+        $("loginScreen").classList.add("hidden");
+        $("adminApp").classList.remove("hidden");
+        $("adminEmail").textContent = session.user.email || "Administrator";
+    } else {
+        showLogin();
+    }
+});
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function openTab(tabName) {
+    document.querySelectorAll(".tab-content").forEach(section => {
+        section.classList.add("hidden");
+    });
+
+    $("tab-" + tabName).classList.remove("hidden");
+
+    document.querySelectorAll(".nav button[data-tab]").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.tab === tabName
+        );
+    });
+}
+
+document.querySelectorAll(".nav button[data-tab]").forEach(button => {
+    button.addEventListener("click", () => openTab(button.dataset.tab));
+});
+
+document.querySelectorAll("[data-goto]").forEach(button => {
+    button.addEventListener("click", () => openTab(button.dataset.goto));
+});
+
+$("refreshBtn").addEventListener("click", loadAllData);
+$("recentRefreshBtn").addEventListener("click", loadAllData);
+
+
+/* =========================================================
+   LOAD DATABASE DATA
+========================================================= */
+
+async function loadAllData() {
+    await Promise.all([
+        loadProducts(),
+        loadOrders()
+    ]);
+}
+
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
+
+async function loadProducts() {
+    $("productsTable").innerHTML = `
+        <tr><td colspan="6">Loading products...</td></tr>
+    `;
+
+    const { data, error } = await db
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        $("productsTable").innerHTML = `
+            <tr>
+                <td colspan="6">
+                    Could not load products: ${escapeHTML(error.message)}
+                </td>
+            </tr>
+        `;
+
+        showMessage("globalMessage", error.message, true);
+        return;
+    }
+
+    currentProducts = data || [];
+
+    renderProducts();
+    updateDashboard();
+}
+
+function renderProducts() {
+    const search = $("productSearch").value.toLowerCase().trim();
+
+    const filtered = currentProducts.filter(product => {
+        return [
+            product.name,
+            product.category,
+            product.description
+        ].join(" ").toLowerCase().includes(search);
+    });
+
+    if (!filtered.length) {
+        $("productsTable").innerHTML = `
+            <tr><td colspan="6">No products found.</td></tr>
+        `;
+        return;
+    }
+
+    $("productsTable").innerHTML = filtered.map(product => {
+        const image = product.image_url
+            ? `<img class="product-image"
+                    src="${escapeHTML(product.image_url)}"
+                    alt="${escapeHTML(product.name)}">`
+            : `<span class="muted">No image</span>`;
+
+        return `
+            <tr>
+                <td>${image}</td>
+
+                <td>
+                    <strong>${escapeHTML(product.name)}</strong>
+                    <span class="muted">
+                        ${escapeHTML((product.description || "").slice(0, 90))}
+                    </span>
+                </td>
+
+                <td>${escapeHTML(product.category || "Other")}</td>
+
+                <td><strong>${formatMoney(product.price)}</strong></td>
+
+                <td>
+                    ${product.active
+                        ? '<span class="badge delivered">Active</span>'
+                        : '<span class="badge cancelled">Inactive</span>'}
+                </td>
+
+                <td>
+                    <button class="btn btn-light btn-small"
+                        data-edit-product="${escapeHTML(product.id)}">
+                        <i class="fa-solid fa-pen"></i> Edit
+                    </button>
+
+                    <button class="btn btn-light btn-small"
+                        data-toggle-product="${escapeHTML(product.id)}">
+                        ${product.active ? "Hide" : "Activate"}
+                    </button>
+
+                    <button class="btn btn-danger btn-small"
+                        data-delete-product="${escapeHTML(product.id)}">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join("");
+}
+
+$("productSearch").addEventListener("input", renderProducts);
+
+
+/* IMAGE PREVIEW */
+
+$("productImage").addEventListener("change", () => {
+    const file = $("productImage").files[0];
+
+    if (!file) {
+        $("imagePreview").style.display = "none";
+        return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+        showMessage("productMessage", "Choose an image file.", true);
+        $("productImage").value = "";
+        return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+        showMessage(
+            "productMessage",
+            "Image is too large. Choose an image smaller than 5 MB.",
+            true
+        );
+
+        $("productImage").value = "";
+        return;
+    }
+
+    $("imagePreview").src = URL.createObjectURL(file);
+    $("imagePreview").style.display = "block";
+});
+
+
+/* UPLOAD IMAGE */
+
+async function uploadProductImage(file) {
+    if (!file) {
+        return {
+            image_url: existingImageUrl,
+            image_path: existingImagePath
+        };
+    }
+
+    if (!file.type.startsWith("image/")) {
+        throw new Error("Please select a valid image file.");
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+        throw new Error("Image must be smaller than 5 MB.");
+    }
+
+    const extension = file.name.split(".").pop()
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+
+    const imagePath =
+        "products/" + crypto.randomUUID() + "." + extension;
+
+    const { error: uploadError } = await db.storage
+        .from(STORAGE_BUCKET)
+        .upload(imagePath, file, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type
+        });
+
+    if (uploadError) throw uploadError;
+
+    const { data } = db.storage
+        .from(STORAGE_BUCKET)
+        .getPublicUrl(imagePath);
+
+    return {
+        image_url: data.publicUrl,
+        image_path: imagePath
+    };
+}
+
+
+/* SAVE PRODUCT */
+
+$("productForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const button = $("saveProductBtn");
+    setButtonLoading(button, true, "Saving product...");
+
+    try {
+        const id = $("productId").value;
+        const name = $("productName").value.trim();
+        const category = $("productCategory").value;
+        const price = Number($("productPrice").value);
+        const description = $("productDescription").value.trim();
+        const active = $("productActive").value === "true";
+        const file = $("productImage").files[0];
+
+        if (!name || !category) {
+            throw new Error("Enter a product name and category.");
+        }
+
+        if (!Number.isFinite(price) || price < 0) {
+            throw new Error("Enter a valid product price.");
+        }
+
+        const image = await uploadProductImage(file);
+
+        const productData = {
+            name,
+            category,
+            price,
+            description,
+            active,
+            image_url: image.image_url,
+            image_path: image.image_path
+        };
+
+        let result;
+
+        if (id) {
+            result = await db
+                .from("products")
+                .update(productData)
+                .eq("id", id);
+        } else {
+            result = await db
+                .from("products")
+                .insert(productData);
+        }
+
+        if (result.error) throw result.error;
+
+        resetProductForm();
+
+        showMessage(
+            "productMessage",
+            id ? "Product updated successfully." : "Product added successfully."
+        );
+
+        await loadProducts();
+
+    } catch (error) {
+        showMessage("productMessage", error.message, true);
+    } finally {
+        setButtonLoading(button, false);
+    }
+});
+
+
+function editProduct(id) {
+    const product = currentProducts.find(item => String(item.id) === String(id));
+
+    if (!product) return;
+
+    $("productId").value = product.id;
+    $("productName").value = product.name || "";
+    $("productCategory").value = product.category || "";
+    $("productPrice").value = product.price ?? "";
+    $("productDescription").value = product.description || "";
+    $("productActive").value = String(product.active !== false);
+
+    existingImageUrl = product.image_url || "";
+    existingImagePath = product.image_path || "";
+
+    $("productImage").value = "";
+
+    if (existingImageUrl) {
+        $("imagePreview").src = existingImageUrl;
+        $("imagePreview").style.display = "block";
+    } else {
+        $("imagePreview").style.display = "none";
+    }
+
+    $("productFormTitle").textContent = "Edit Product";
+    $("saveProductBtn").innerHTML =
+        '<i class="fa-solid fa-floppy-disk"></i> Update Product';
+
+    $("cancelEditBtn").classList.remove("hidden");
+
+    openTab("products");
+    $("productForm").scrollIntoView({ behavior: "smooth" });
+}
+
+
+function resetProductForm() {
+    $("productForm").reset();
+    $("productId").value = "";
+
+    existingImageUrl = "";
+    existingImagePath = "";
+
+    $("imagePreview").style.display = "none";
+    $("productFormTitle").textContent = "Add New Product";
+
+    $("saveProductBtn").innerHTML =
+        '<i class="fa-solid fa-floppy-disk"></i> Save Product';
+
+    $("cancelEditBtn").classList.add("hidden");
+}
+
+$("resetProductBtn").addEventListener("click", resetProductForm);
+$("cancelEditBtn").addEventListener("click", resetProductForm);
+
+
+/* PRODUCT TABLE ACTIONS */
+
+$("productsTable").addEventListener("click", async event => {
+    const editButton = event.target.closest("[data-edit-product]");
+    const toggleButton = event.target.closest("[data-toggle-product]");
+    const deleteButton = event.target.closest("[data-delete-product]");
+
+    if (editButton) {
+        editProduct(editButton.dataset.editProduct);
+        return;
+    }
+
+    if (toggleButton) {
+        const product = currentProducts.find(
+            item => String(item.id) === String(toggleButton.dataset.toggleProduct)
+        );
+
+        if (!product) return;
+
+        const { error } = await db
+            .from("products")
+            .update({ active: !product.active })
+            .eq("id", product.id);
+
+        if (error) {
+            showMessage("globalMessage", error.message, true);
+            return;
+        }
+
+        await loadProducts();
+        showMessage("globalMessage", "Product visibility updated.");
+        return;
+    }
+
+    if (deleteButton) {
+        const product = currentProducts.find(
+            item => String(item.id) === String(deleteButton.dataset.deleteProduct)
+        );
+
+        if (!product) return;
+
+        const confirmed = confirm(
+            "Delete " + product.name + "?\n\n" +
+            "This removes the product record. Existing order records should be preserved."
+        );
+
+        if (!confirmed) return;
+
+        const { error } = await db
+            .from("products")
+            .delete()
+            .eq("id", product.id);
+
+        if (error) {
+            showMessage(
+                "globalMessage",
+                "Could not delete product. It may be linked to existing orders. " +
+                error.message,
+                true
+            );
+            return;
+        }
+
+        await loadProducts();
+        showMessage("globalMessage", "Product deleted.");
+    }
+});
+
+
+/* =========================================================
+   ORDERS
+========================================================= */
+
+async function loadOrders() {
+    $("ordersTable").innerHTML = `
+        <tr><td colspan="7">Loading orders...</td></tr>
+    `;
+
+    /*
+      This expects a foreign-key relationship between orders.id
+      and order_items.order_id.
+    */
+
+    const { data, error } = await db
+        .from("orders")
+        .select("*, order_items(*)")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        $("ordersTable").innerHTML = `
+            <tr>
+                <td colspan="7">
+                    Could not load orders: ${escapeHTML(error.message)}
+                </td>
+            </tr>
+        `;
+
+        showMessage("globalMessage", error.message, true);
+        return;
+    }
+
+    currentOrders = data || [];
+
+    renderOrders();
+    renderRecentOrders();
+    updateDashboard();
+}
+
+function renderOrders() {
+    const search = $("orderSearch").value.toLowerCase().trim();
+    const statusFilter = $("orderStatusFilter").value;
+
+    const filtered = currentOrders.filter(order => {
+        const searchable = [
+            order.order_number,
+            order.customer_name,
+            order.customer_phone,
+            order.customer_whatsapp,
+            order.delivery_address,
+            order.delivery_city,
+            order.delivery_state,
+            order.status
+        ].join(" ").toLowerCase();
+
+        return searchable.includes(search) &&
+            (!statusFilter || order.status === statusFilter);
+    });
+
+    if (!filtered.length) {
+        $("ordersTable").innerHTML = `
+            <tr><td colspan="7">No orders found.</td></tr>
+        `;
+        return;
+    }
+
+    $("ordersTable").innerHTML = filtered.map(order => `
+        <tr>
+            <td>
+                <strong>${escapeHTML(order.order_number || order.id)}</strong>
+                <span class="muted">${formatDate(order.created_at)}</span>
+            </td>
+
+            <td>
+                <strong>${escapeHTML(order.customer_name || "Customer")}</strong>
+                ${escapeHTML(order.customer_phone || "")}
+            </td>
+
+            <td>
+                ${escapeHTML(order.delivery_city || "")}
+                ${escapeHTML(order.delivery_state || "")}
+                <br>
+                <span class="muted">
+                    ${escapeHTML(order.delivery_date || "Date not selected")}
+                </span>
+            </td>
+
+            <td><strong>${formatMoney(order.total_amount)}</strong></td>
+
+            <td>
+                ${escapeHTML(
+                    (order.payment_method || "payment_on_delivery")
+                        .replace(/_/g, " ")
+                )}
+            </td>
+
+            <td>${statusBadge(order.status)}</td>
+
+            <td>
+                <button class="btn btn-primary btn-small"
+                    data-view-order="${escapeHTML(order.id)}">
+                    View
+                </button>
+
+                <button class="btn btn-success btn-small"
+                    data-whatsapp-order="${escapeHTML(order.id)}">
+                    WhatsApp
+                </button>
+            </td>
+        </tr>
+    `).join("");
+}
+
+$("orderSearch").addEventListener("input", renderOrders);
+$("orderStatusFilter").addEventListener("change", renderOrders);
+
+
+/* RECENT ORDERS */
+
+function renderRecentOrders() {
+    const recent = currentOrders.slice(0, 8);
+
+    if (!recent.length) {
+        $("recentOrders").innerHTML = "No orders have been placed yet.";
+        return;
+    }
+
+    $("recentOrders").innerHTML = `
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    ${recent.map(order => `
+                        <tr>
+                            <td>${escapeHTML(order.order_number || order.id)}</td>
+                            <td>${escapeHTML(order.customer_name || "")}</td>
+                            <td>${formatMoney(order.total_amount)}</td>
+                            <td>${statusBadge(order.status)}</td>
+                            <td>
+                                <button class="btn btn-primary btn-small"
+                                    data-view-order="${escapeHTML(order.id)}">
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+
+/* VIEW ORDER */
+
+function viewOrder(id) {
+    const order = currentOrders.find(
+        item => String(item.id) === String(id)
+    );
+
+    if (!order) return;
+
+    selectedOrder = order;
+
+    const items = order.order_items || [];
+
+    const itemRows = items.length
+        ? items.map(item => `
+            <tr>
+                <td>${escapeHTML(item.product_name || "Product")}</td>
+                <td>${Number(item.quantity || 0)}</td>
+                <td>${formatMoney(item.unit_price)}</td>
+                <td>${formatMoney(item.subtotal)}</td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="4">No order items found.</td></tr>`;
+
+    $("orderDetailsContent").innerHTML = `
+        <div class="order-detail">
+            <strong>Order reference:</strong>
+            ${escapeHTML(order.order_number || order.id)}<br>
+
+            <strong>Order date:</strong>
+            ${formatDate(order.created_at)}<br>
+
+            <strong>Customer:</strong>
+            ${escapeHTML(order.customer_name || "")}<br>
+
+            <strong>Phone:</strong>
+            ${escapeHTML(order.customer_phone || "")}<br>
+
+            <strong>WhatsApp:</strong>
+            ${escapeHTML(order.customer_whatsapp || "")}<br>
+
+            <strong>Email:</strong>
+            ${escapeHTML(order.customer_email || "Not provided")}<br>
+
+            <strong>Delivery address:</strong>
+            ${escapeHTML(order.delivery_address || "")}<br>
+
+            <strong>City:</strong>
+            ${escapeHTML(order.delivery_city || "")}<br>
+
+            <strong>State:</strong>
+            ${escapeHTML(order.delivery_state || "")}<br>
+
+            <strong>Delivery date:</strong>
+            ${escapeHTML(order.delivery_date || "Not selected")}<br>
+
+            <strong>Delivery time:</strong>
+            ${escapeHTML(order.delivery_time || "Not specified")}<br>
+
+            <strong>Customer notes:</strong>
+            ${escapeHTML(order.notes || "None")}<br>
+
+            <strong>Payment method:</strong>
+            ${escapeHTML(order.payment_method || "payment_on_delivery")}<br>
+
+            <strong>Payment status:</strong>
+            ${escapeHTML(order.payment_status || "unpaid")}<br>
+
+            <strong>Order status:</strong>
+            ${statusBadge(order.status)}<br>
+
+            <strong>Total:</strong>
+            ${formatMoney(order.total_amount)}
+        </div>
+
+        <h3>Items ordered</h3>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>${itemRows}</tbody>
+            </table>
+        </div>
+
+        <h3>Update order</h3>
+
+        <div class="form-grid">
+            <div class="field">
+                <label for="newOrderStatus">Order status</label>
+
+                <select id="newOrderStatus">
+                    ${[
+                        "pending",
+                        "processing",
+                        "shipped",
+                        "delivered",
+                        "cancelled",
+                        "cancellation_requested"
+                    ].map(status => `
+                        <option value="${status}"
+                            ${order.status === status ? "selected" : ""}>
+                            ${status.replace(/_/g, " ")}
+                        </option>
+                    `).join("")}
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="newPaymentStatus">Payment status</label>
+
+                <select id="newPaymentStatus">
+                    ${[
+                        "unpaid",
+                        "paid",
+                        "refunded"
+                    ].map(status => `
+                        <option value="${status}"
+                            ${(order.payment_status || "unpaid") === status
+                                ? "selected" : ""}>
+                            ${status}
+                        </option>
+                    `).join("")}
+                </select>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" id="saveOrderChanges">
+                Save Changes
+            </button>
+
+            <button class="btn btn-success" id="detailWhatsApp">
+                <i class="fa-brands fa-whatsapp"></i> Contact Customer
+            </button>
+
+            ${order.status === "cancellation_requested" ? `
+                <button class="btn btn-danger" id="rejectCancellation">
+                    Reject Cancellation
+                </button>
+            ` : ""}
+        </div>
+
+        <p class="muted">
+            Only mark an order as delivered or paid after confirmation.
+        </p>
+    `;
+
+    $("orderDetailsPanel").classList.remove("hidden");
+
+    $("orderDetailsPanel").scrollIntoView({
+        behavior: "smooth"
+    });
+
+    $("saveOrderChanges").addEventListener("click", saveOrderChanges);
+
+    $("detailWhatsApp").addEventListener("click", () => {
+        openOrderWhatsApp(order);
+    });
+
+    const rejectButton = $("rejectCancellation");
+
+    if (rejectButton) {
+        rejectButton.addEventListener("click", rejectCancellation);
+    }
+}
+
+
+/* ORDER TABLE BUTTONS */
+
+document.addEventListener("click", event => {
+    const viewButton = event.target.closest("[data-view-order]");
+    const whatsappButton = event.target.closest("[data-whatsapp-order]");
+
+    if (viewButton) {
+        viewOrder(viewButton.dataset.viewOrder);
+    }
+
+    if (whatsappButton) {
+        const order = currentOrders.find(
+            item => String(item.id) === String(whatsappButton.dataset.whatsappOrder)
+        );
+
+        if (order) openOrderWhatsApp(order);
+    }
+});
+
+$("closeOrderDetails").addEventListener("click", () => {
+    $("orderDetailsPanel").classList.add("hidden");
+});
+
+
+/* UPDATE ORDER STATUS */
+
+async function saveOrderChanges() {
+    if (!selectedOrder) return;
+
+    const status = $("newOrderStatus").value;
+    const paymentStatus = $("newPaymentStatus").value;
+
+    const confirmed = confirm(
+        "Update order " +
+        (selectedOrder.order_number || selectedOrder.id) +
+        "?\n\nNew order status: " + status +
+        "\nNew payment status: " + paymentStatus
+    );
+
+    if (!confirmed) return;
+
+    const button = $("saveOrderChanges");
+    setButtonLoading(button, true, "Saving...");
+
+    try {
+        const { error } = await db
+            .from("orders")
+            .update({
+                status,
+                payment_status: paymentStatus
+            })
+            .eq("id", selectedOrder.id);
+
+        if (error) throw error;
+
+        showMessage("globalMessage", "Order updated successfully.");
+
+        await loadOrders();
+
+        const updatedOrder = currentOrders.find(
+            item => String(item.id) === String(selectedOrder.id)
+        );
+
+        if (updatedOrder) {
+            viewOrder(updatedOrder.id);
+        }
+
+    } catch (error) {
+        showMessage("globalMessage", error.message, true);
+    } finally {
+        setButtonLoading(button, false);
+    }
+}
+
+
+/* REJECT A CANCELLATION REQUEST */
+
+async function rejectCancellation() {
+    if (!selectedOrder) return;
+
+    /*
+      This restores the order to pending.
+      If your business needs a different previous status,
+      implement that state transition explicitly.
+    */
+
+    const confirmed = confirm(
+        "Reject the customer's cancellation request and restore this order to pending?"
+    );
+
+    if (!confirmed) return;
+
+    const { error } = await db
+        .from("orders")
+        .update({ status: "pending" })
+        .eq("id", selectedOrder.id)
+        .eq("status", "cancellation_requested");
+
+    if (error) {
+        showMessage("globalMessage", error.message, true);
+        return;
+    }
+
+    showMessage("globalMessage", "Cancellation request rejected.");
+
+    await loadOrders();
+
+    const updatedOrder = currentOrders.find(
+        item => String(item.id) === String(selectedOrder.id)
+    );
+
+    if (updatedOrder) viewOrder(updatedOrder.id);
+}
+
+
+/* =========================================================
+   WHATSAPP ORDER CONFIRMATION
+========================================================= */
+
+function openOrderWhatsApp(order) {
+    const phone = normalisePhone(
+        order.customer_whatsapp || order.customer_phone
+    );
+
+    if (!phone) {
+        alert("This order has no customer phone or WhatsApp number.");
+        return;
+    }
+
+    const items = order.order_items || [];
+
+    const itemText = items.map(item =>
+        "- " + (item.product_name || "Product") +
+        " x " + Number(item.quantity || 0) +
+        " = " + formatMoney(item.subtotal)
+    ).join("\n");
+
+    const message =
+        "Hello " + (order.customer_name || "Customer") + ",\n\n" +
+        "This is your furniture order confirmation.\n\n" +
+        "Order: " + (order.order_number || order.id) + "\n\n" +
+        "Items:\n" + (itemText || "Please confirm your items.") + "\n\n" +
+        "Total: " + formatMoney(order.total_amount) + "\n" +
+        "Payment: " + (order.payment_method || "Pay on Delivery") + "\n" +
+        "Delivery address: " + (order.delivery_address || "Not provided") + "\n" +
+        "City: " + (order.delivery_city || "Not provided") + "\n" +
+        "State: " + (order.delivery_state || "Not provided") + "\n" +
+        "Requested delivery date: " + (order.delivery_date || "To be confirmed") + "\n" +
+        "Requested delivery time: " + (order.delivery_time || "To be confirmed") + "\n\n" +
+        "Please confirm that your order details and delivery date are correct.\n\n" +
+        "Thank you for shopping with us.";
+
+    const url =
+        "https://wa.me/" + phone +
+        "?text=" + encodeURIComponent(message);
+
+    window.open(url, "_blank", "noopener,noreferrer");
+}
+
+
+/* =========================================================
+   DASHBOARD STATISTICS
+========================================================= */
+
+function updateDashboard() {
+    const activeProducts = currentProducts.filter(
+        product => product.active !== false
+    ).length;
+
+    const pendingOrders = currentOrders.filter(
+        order => order.status === "pending"
+    ).length;
+
+    const deliveredValue = currentOrders
+        .filter(order => order.status === "delivered")
+        .reduce((sum, order) => sum + Number(order.total_amount || 0), 0);
+
+    $("statProducts").textContent = activeProducts;
+    $("statOrders").textContent = currentOrders.length;
+    $("statPending").textContent = pendingOrders;
+    $("statRevenue").textContent = formatMoney(deliveredValue);
+}
+
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+(async function init() {
+    if (
+        SUPABASE_URL === "YOUR_SUPABASE_PROJECT_URL" ||
+        SUPABASE_ANON_KEY === "YOUR_SUPABASE_PUBLISHABLE_KEY"
+    ) {
+        showLogin();
+
+        showMessage(
+            "loginMessage",
+            "First add your Supabase Project URL and publishable/anon key in the code.",
+            true
+        );
+
+        return;
+    }
+
+    const { data, error } = await db.auth.getSession();
+
+    if (error) {
+        showLogin();
+        showMessage("loginMessage", error.message, true);
+        return;
+    }
+
+    if (data.session?.user) {
+        showAdmin(data.session.user);
+    } else {
+        showLogin();
+    }
+})();
+</script>
+
+</body>
+</html>
